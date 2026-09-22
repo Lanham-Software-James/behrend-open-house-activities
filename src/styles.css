@@ -1,1 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+/* Penn State Design Essentials: brand.psu.edu/design-toolkit/design-essentials */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+  --psu-navy: #001e44;
+  --psu-blue: #1e407c;
+  --psu-pugh-blue: #96bee6;
+  font-family: 'Roboto', Arial, sans-serif;
+  color: var(--psu-navy);
+  background: #fff;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; }
