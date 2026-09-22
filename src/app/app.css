@@ -1,0 +1,65 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.shell {
+  width: min(100% - 4rem, 75rem);
+  margin-inline: auto;
+}
+
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 10;
+  padding: 1rem;
+  background: white;
+  color: var(--psu-navy);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus { transform: translateY(0); }
+
+.site-header { background: var(--psu-navy); color: white; }
+.masthead { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding-block: 1.6rem; }
+.campus-logo { display: block; flex-shrink: 0; }
+.campus-logo img { display: block; width: 15rem; height: auto; }
+.campus-link { font-size: .875rem; color: white; text-decoration: none; }
+.campus-link span, .footer-links span { margin-left: .5rem; color: var(--psu-pugh-blue);}
+.event-bar { border-top: 1px solid #ffffff26; background: var(--psu-blue); }
+.event-content { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding-block: 1.5rem; }
+.event-title { display: flex; flex-direction: column; gap: .5rem; color: white; text-decoration: none; }
+.eyebrow { font-size: .75rem; font-weight: 500; line-height: 1.6; letter-spacing: .1em; text-transform: uppercase; }
+.event-name { font-size: clamp(1.6rem, 3vw, 2rem); font-weight: 700; line-height: 1.15; letter-spacing: -.025em; }
+.welcome { color: white; font-size: .9375rem; }
+.site-main { flex: 1; padding-block: 2rem; }
+.site-main:focus { outline: none; }
+.site-footer { background: var(--psu-navy); color: white; border-top: 4px solid var(--psu-pugh-blue); }
+.footer-main { display: flex; justify-content: space-between; gap: 2rem; padding-block: 2rem; }
+.footer-identity p { margin: 0; font-size: .875rem; line-height: 1.7; }
+.footer-identity .footer-campus { font-size: 1.125rem; font-weight: 700; margin-bottom: .45rem; }
+.footer-identity .footer-event { color: var(--psu-pugh-blue); margin-top: .25rem; }
+.footer-links { display: flex; gap: 0.25rem; align-items: flex-start; flex-direction: column; }
+.footer-links a { font-size: .875rem; text-decoration: none; padding-block: .5rem; }
+.site-footer a { color: white; }
+.footer-bottom { border-top: 1px solid #ffffff26; padding-block: 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.footer-bottom small, .policy-links { font-size: .75rem; line-height: 1.7; }
+.policy-links { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; }
+.policy-links a { padding-block: .5rem; text-underline-offset: .25em; }
+a:hover { text-decoration: underline; text-underline-offset: .25em; }
+a:focus-visible { outline: 3px solid var(--psu-pugh-blue); outline-offset: 6px; border-radius: 2px; }
+
+@media (max-width: 640px) {
+  .shell { width: calc(100% - 2.5rem); }
+  .masthead { padding-block: 1.25rem; gap: 1rem; }
+  .campus-logo img { width: clamp(9rem, 44vw, 12rem); }
+  .event-content { align-items: flex-start; flex-direction: column; gap: .75rem; }
+  .eyebrow { max-width: 28ch; }
+  .footer-main, .footer-bottom { flex-direction: column; align-items: flex-start; }
+  .footer-main { gap: 1rem; padding-block: 1.5rem; }
+  .footer-links { flex-wrap: wrap; gap: .5rem 1.5rem; }
+  .footer-bottom { gap: .5rem; }
+}
