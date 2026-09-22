@@ -38,7 +38,12 @@ This will compile your project and store the build artifacts in the `dist/` dire
 
 ## GitHub Pages deployment
 
-The workflow in `.github/workflows/deploy-pages.yml` installs dependencies with
+The workflow in `.github/workflows/deploy-pages.yml` first runs the reusable
+`.github/workflows/test.yml` workflow. All unit tests must pass before the build
+starts; a failed or cancelled test job skips both build and deployment. The test
+workflow also runs on pull requests and can be started manually from Actions.
+
+After tests pass, the deployment workflow installs dependencies with
 `npm ci`, builds the production application using Node.js 24, and publishes the
 browser output to GitHub Pages. The base URL comes from the repository's Pages
 configuration so assets load correctly under the repository path.
