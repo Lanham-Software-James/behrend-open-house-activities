@@ -1,8 +1,20 @@
+import { Component, input } from '@angular/core';
+import { ActivityPreview } from './activity';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 import { provideRouter, Router } from '@angular/router';
 import { App } from '../app';
 import { routes } from '../app.routes';
+import { Home } from './home';
+import { SearchPreview } from './previews/search-preview';
+
+@Component({
+  selector: 'app-test-preview',
+  template: '<span class="custom-preview">Custom: {{ preview().label }}</span>',
+})
+class TestPreview {
+  readonly preview = input.required<ActivityPreview>();
+}
 
 const activities = [
   ['Beat Binary Search', '/activities/beat-binary-search'],
@@ -53,6 +65,21 @@ describe('Homepage', () => {
     expect(links).toHaveLength(3);
     expect(links.map((link) => link.getAttribute('href')).sort())
       .toEqual(activities.map(([, path]) => path).sort());
+  });
+
+  it('preserves the displayed card order', () => {
+    expect(Array.from(root.querySelectorAll('main .activity h3'), (heading) => heading.textContent))
+      .toEqual(['Find the Shortest Path', 'Beat Binary Search', 'Binary Challenge']);
+  });
+
+  it.each([
+    ['Find the Shortest Path', 'light'],
+    ['Beat Binary Search', 'dark'],
+    ['Binary Challenge', 'light'],
+  ])('assigns the %s card its %s theme', (title, theme) => {
+    const link = card(title);
+    expect(link.classList.contains(`theme-${theme}`)).toBe(true);
+    expect(link.classList.contains(`theme-${theme === 'light' ? 'dark' : 'light'}`)).toBe(false);
   });
 
   it('labels the introduction and challenge sections with their headings', () => {
@@ -139,5 +166,140 @@ describe('Homepage', () => {
     expect(TestBed.inject(Title).getTitle()).toBe(homeTitle);
     expect(element('header')).toBe(header);
     expect(element('footer')).toBe(footer);
+  });
+});
+
+// Exercise the real template with alternate data without changing the production
+// component's protected, readonly configuration API.
+describe('Homepage activity data rendering', () => {
+  let fixture: ComponentFixture<Home>;
+  let initial: Home['activities'];
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [Home], providers: [provideRouter(routes)],
+    }).compileComponents();
+    fixture = TestBed.createComponent(Home);
+    initial = fixture.componentInstance['activities'];
+    await fixture.whenStable();
+  });
+
+  async function render(activities: Home['activities']) {
+    fixture.destroy();
+    fixture = TestBed.createComponent(Home);
+    Object.defineProperty(fixture.componentInstance, 'activities', { value: activities });
+    fixture.changeDetectorRef.markForCheck();
+    fixture.detectChanges();
+    await fixture.whenStable();
+  }
+
+  function cards(): HTMLAnchorElement[] {
+    return Array.from(fixture.nativeElement.querySelectorAll('a.activity'));
+  }
+
+  it('updates an existing card’s content, route, and theme from its data', async () => {
+    await render([
+      {
+        ...initial[0], title: 'Updated challenge', description: 'A new description.',
+        route: '/activities/binary-challenge', theme: 'dark',
+        category: 'New category', concept: 'A new concept.', actionLabel: 'Try this activity',
+        previewComponent: SearchPreview,
+        preview: { kind: 'search', label: 'NEW PREVIEW', min: 10, max: 20, guess: 15, caption: 'Take a guess' },
+      },
+      ...initial.slice(1),
+    ]);
+    const updated = cards()[0];
+    expect(updated.querySelector('h3')?.textContent).toBe('Updated challenge');
+    expect(updated.querySelector(`#${updated.getAttribute('aria-describedby')}`)?.textContent).toBe('A new description.');
+    expect(updated.getAttribute('href')).toBe('/activities/binary-challenge');
+    expect(updated.classList.contains('theme-dark')).toBe(true);
+    expect(updated.classList.contains('theme-light')).toBe(false);
+    expect(updated.querySelector('.category')?.textContent).toBe('New category');
+    expect(updated.querySelector('.concept')?.textContent).toBe('A new concept.');
+    expect(updated.querySelector('.card-action')?.textContent).toContain('Try this activity');
+    expect(updated.querySelector('.preview-label')?.textContent).toBe('NEW PREVIEW');
+    expect(updated.querySelector('.guess')?.textContent).toBe('15?');
+    expect(updated.querySelector('.preview-caption')?.textContent).toBe('Take a guess');
+    expect(updated.querySelector('svg')).toBeNull();
+    updated.click();
+    await fixture.whenStable();
+    expect(TestBed.inject(Router).url).toBe('/activities/binary-challenge');
+  });
+
+  it('renders a new component selected by the array without a template branch', async () => {
+    await render([{ ...initial[0], previewComponent: TestPreview }]);
+    const card = cards()[0];
+    expect(card.querySelector('.custom-preview')?.textContent).toBe(`Custom: ${initial[0].preview.label}`);
+    expect(card.querySelector('app-graph-preview')).toBeNull();
+    expect(card.querySelector('.custom-preview')?.closest('[aria-hidden="true"]')).not.toBeNull();
+  });
+
+  it('passes independent input data to two instances of the same preview component', async () => {
+    await render([
+      { ...initial[1], id: 'first-search', preview: {
+        kind: 'search', label: 'FIRST', min: 1, max: 10, guess: 5, caption: 'First hint',
+      } },
+      { ...initial[1], id: 'second-search', preview: {
+        kind: 'search', label: 'SECOND', min: 20, max: 40, guess: 30, caption: 'Second hint',
+      } },
+    ]);
+    const [first, second] = cards();
+    expect(first.querySelector('.guess')?.textContent).toBe('5?');
+    expect(second.querySelector('.guess')?.textContent).toBe('30?');
+    expect(first.querySelector('.preview-caption')?.textContent).toBe('First hint');
+    expect(second.querySelector('.preview-caption')?.textContent).toBe('Second hint');
+    expect(Array.from(second.querySelectorAll('.number-range > span'), (span) => span.textContent))
+      .toEqual(['20', '', '40']);
+  });
+
+  it('passes configured start and finish labels to the graph preview', async () => {
+    await render([{ ...initial[0], preview: {
+      kind: 'graph', label: 'CUSTOM ROUTE', start: 'CAMPUS', finish: 'LIBRARY',
+    } }]);
+    expect(Array.from(cards()[0].querySelectorAll('.graph-labels span'), (span) => span.textContent))
+      .toEqual(['CAMPUS', 'LIBRARY']);
+    expect(cards()[0].querySelector('svg')).not.toBeNull();
+  });
+
+  it('passes alternate bits, active states, and caption to the binary preview', async () => {
+    await render([{ ...initial[2], preview: {
+      kind: 'binary', label: 'CUSTOM BITS', bits: [
+        { weight: 4, value: 1 }, { weight: 2, value: 0 }, { weight: 1, value: 1 },
+      ], total: 5, caption: 'Build the number',
+    } }]);
+    const bits = Array.from(cards()[0].querySelectorAll('.bits > span'));
+    expect(bits).toHaveLength(3);
+    expect(bits.map((bit) => bit.querySelector('small')?.textContent)).toEqual(['4', '2', '1']);
+    expect(bits.map((bit) => bit.classList.contains('on'))).toEqual([true, false, true]);
+    expect(cards()[0].querySelector('.binary-total')?.textContent).toBe('Build the number 5.');
+  });
+
+  it('renders cards in the order supplied by the array', async () => {
+    await render([initial[2], initial[0], initial[1]]);
+    expect(cards().map((card) => card.querySelector('h3')?.textContent))
+      .toEqual([initial[2].title, initial[0].title, initial[1].title]);
+  });
+
+  it('renders an added activity with its own route and accessible references', async () => {
+    await render([...initial, {
+      ...initial[0], id: 'extra', title: 'Extra challenge', route: '/activities/extra',
+    }]);
+    expect(cards()).toHaveLength(4);
+    const added = cards()[3];
+    expect(added.getAttribute('href')).toBe('/activities/extra');
+    expect(added.getAttribute('aria-labelledby')).toBe('extra-title');
+    expect(added.querySelector('#extra-title')?.textContent).toBe('Extra challenge');
+    expect(added.getAttribute('aria-describedby')).toBe('extra-description');
+    expect(added.querySelector('#extra-description')?.textContent).toBe(initial[0].description);
+    const ids = Array.from(fixture.nativeElement.querySelectorAll('[id]'), (node) => (node as Element).id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('removes a deleted activity without leaving its link or accessible labels behind', async () => {
+    await render([initial[0], initial[2]]);
+    expect(cards()).toHaveLength(2);
+    expect(cards().map((card) => card.getAttribute('href'))).toEqual([initial[0].route, initial[2].route]);
+    expect(fixture.nativeElement.querySelector(`#${initial[1].id}-title`)).toBeNull();
+    expect(fixture.nativeElement.querySelector(`#${initial[1].id}-description`)).toBeNull();
   });
 });
