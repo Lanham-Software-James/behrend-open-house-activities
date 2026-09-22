@@ -1,3 +1,38 @@
-<h1>Beat Binary Search</h1>
-<p>Can you find the number faster than an algorithm?</p>
-<p>Activity coming soon.</p>
+<a class="back" routerLink="/">← All challenges</a>
+<div class="intro"><p class="eyebrow">A little intuition. A smarter strategy.</p><h1>Beat Binary Search</h1><p>Can you beat the algorithm? Find the secret number, then compare your guesses with binary search.</p></div>
+<section class="game" aria-label="Number guessing challenge">
+  <div class="banner"><span>One secret number · 1–100</span><span>You vs. <strong>binary search</strong></span></div>
+  <div class="game-content">
+    <div class="mystery" aria-hidden="true">{{ solved() ? history().at(-1)?.value : '?' }}</div>
+    <p class="instructions">I’m thinking of a number from <strong>1 to 100</strong>. What’s your guess?</p>
+    <div class="feedback" aria-live="polite" aria-atomic="true"><p>{{ feedback() }}</p></div>
+    @if (!solved()) {
+      <form (submit)="submit($event)" novalidate>
+        <label for="guess">Your guess</label>
+        <div class="guess-controls"><input id="guess" type="number" inputmode="numeric" min="1" max="100" step="1" autocomplete="off"
+          [value]="input()" (input)="input.set($any($event.target).value)" [attr.aria-invalid]="error() ? 'true' : null" aria-describedby="guess-help guess-error">
+          <button class="primary" type="submit">Check guess →</button></div>
+        <p id="guess-help" class="help">Enter a whole number. Press Enter or select Check guess.</p>
+        <p id="guess-error" class="error" role="alert">{{ error() }}</p>
+      </form>
+      <p class="count">{{ count() }} {{ count() === 1 ? 'guess' : 'guesses' }} so far</p>
+    }
+    @if (solved()) {
+      <section class="result" aria-label="Your result">
+        <h2>{{ result() }}</h2>
+        <div class="comparison"><p>You<strong>{{ count() }} {{ count() === 1 ? 'guess' : 'guesses' }}</strong></p><p>Binary Search<strong>{{ algorithmCount() }} {{ algorithmCount() === 1 ? 'guess' : 'guesses' }}</strong></p></div>
+        <p>Binary search checks the middle of the remaining range each time, eliminating half the possibilities with every guess.</p>
+        <p class="help">Both scores are for the same secret number. Watch the search below to see how the computer found it.</p>
+        <app-search-replay [target]="history().at(-1)!.value" />
+        <button class="primary" (click)="reset()">Play again</button>
+      </section>
+    }
+    @if (count() > 0) {
+      <section class="history" aria-labelledby="history-title"><h2 id="history-title">Your trail of guesses</h2>
+        <ol>@for (guess of history(); track guess.value) {<li><strong>{{ guess.value }}</strong><span>{{ guess.hint }}</span></li>}</ol>
+      </section>
+    }
+    @if (!solved() && count() > 0) { <button class="reset" (click)="reset()">Start over</button> }
+  </div>
+</section>
+<aside class="note"><h2>Fast thinking is good. A good strategy is better.</h2><p>Computer scientists design algorithms: repeatable steps for solving problems. Try your own approach, then play again and see how much a strategy can change your score.</p></aside>

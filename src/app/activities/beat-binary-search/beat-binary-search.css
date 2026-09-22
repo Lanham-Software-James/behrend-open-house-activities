@@ -1,1 +1,39 @@
-/* Activity-specific styles go here. */
+:host { display: block; max-width: 56rem; margin: auto; padding-bottom: 1rem; }
+.back { color: var(--psu-blue); font-size: .875rem; text-underline-offset: .25em; }
+.intro { margin: 2rem 0; }
+.eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--psu-blue); }
+h1 { font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -.04em; margin: .5rem 0; }
+p { line-height: 1.65; color: #46566b; }
+.game { border: 1px solid #cfdae6; border-radius: 1rem; overflow: hidden; }
+.banner { background: var(--psu-navy); color: white; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; gap: 1rem; font-size: .875rem; }
+.banner strong { color: var(--psu-pugh-blue); }
+.game-content { padding: 2rem; text-align: center; }
+.mystery { display: grid; place-items: center; width: 6rem; height: 6rem; margin: 0 auto 1.5rem; background: var(--psu-navy); color: white; border-radius: 1rem; font-size: 3rem; font-weight: 700; }
+.feedback { background: #e2edfa; border-radius: .5rem; padding: .6rem 1rem; margin: 1rem auto; }
+.feedback p { color: var(--psu-navy); margin: .3rem 0; font-weight: 500; }
+form { max-width: 30rem; margin: 1.5rem auto 0; text-align: left; }
+label { display: block; margin-bottom: .5rem; font-weight: 700; font-size: .875rem; }
+.guess-controls { display: flex; gap: .75rem; }
+input { min-width: 0; width: 100%; border: 1px solid #8098b4; border-radius: .4rem; padding: .7rem; color: var(--psu-navy); font: inherit; font-size: 1.25rem; }
+button { font: inherit; cursor: pointer; min-height: 44px; }
+.primary { background: var(--psu-blue); color: white; border: 1px solid var(--psu-blue); padding: .8rem 1.25rem; border-radius: .4rem; font-weight: 700; white-space: nowrap; }
+.primary:hover { background: var(--psu-navy); }
+.help { font-size: .8rem; }
+.error { color: #a32222; font-size: .875rem; min-height: 1.4rem; margin-bottom: 0; }
+.count { font-weight: 700; color: var(--psu-blue); }
+.encouragement { font-size: .875rem; }
+h2 { font-size: 1.25rem; }
+.comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 30rem; margin: auto; }
+.comparison p { padding: 1rem; background: #f2f5f9; border-radius: .5rem; font-size: .875rem; }
+.comparison strong { display: block; font-size: 1.5rem; color: var(--psu-navy); margin-top: .5rem; }
+.history { border-top: 1px solid #cfdae6; margin-top: 2rem; padding-top: 1rem; }
+.history h2 { font-size: 1rem; }
+ol { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; padding: 0; list-style: none; }
+li { display: flex; flex-direction: column; gap: .3rem; border: 1px solid #cfdae6; border-radius: .4rem; padding: .65rem 1rem; }
+li span { font-size: .75rem; color: #46566b; }
+.reset { background: white; color: var(--psu-blue); border: 1px solid var(--psu-blue); padding: .7rem 1rem; border-radius: .4rem; margin-top: 1rem; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--psu-pugh-blue); outline-offset: 4px; }
+.note { background: #f2f5f9; padding: 1.5rem; margin-top: 2rem; border-radius: .6rem; }
+.note h2 { font-size: 1.125rem; }
+.note p { font-size: .9rem; }
+@media (max-width: 600px) { .banner { flex-direction: column; gap: .5rem; } .game-content { padding: 1.25rem; } .guess-controls { flex-direction: column; } .comparison strong { font-size: 1.2rem; } }
