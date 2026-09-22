@@ -1,3 +1,51 @@
-<h1>Find the Shortest Path</h1>
-<p>Can you beat Dijkstra?</p>
-<p>Activity coming soon.</p>
+<a class="back" routerLink="/">← All challenges</a>
+<div class="intro"><p class="eyebrow">Many routes. One shortest distance.</p><h1>Find the Shortest Path</h1><p>Build a route from START to FINISH. Can you match Dijkstra’s algorithm?</p></div>
+<section class="game" aria-label="Shortest path challenge">
+  <div class="banner"><span>7 nodes · Random costs from 1–9</span><strong>Your route: {{ cost() }}</strong></div>
+  <p class="instructions">Click a connected node on the map to extend your route. You can also use Tab and Enter or Space. Edge numbers are costs, not physical distances. Stuck? Undo your last move.</p>
+  <div class="map">
+    <svg viewBox="0 0 660 360" role="group" aria-label="Interactive weighted route map">
+      @for (edge of graph().edges; track $index) {
+        <line [attr.x1]="graph().nodes[edge.from].x" [attr.y1]="graph().nodes[edge.from].y" [attr.x2]="graph().nodes[edge.to].x" [attr.y2]="graph().nodes[edge.to].y"
+          [class.exploring]="running() && (edge.from === currentStep()?.node || edge.to === currentStep()?.node)" [class.player]="onPath(edge, route())" [class.optimal]="revealed() && onPath(edge, solution().path)" />
+        <g><rect [attr.x]="(graph().nodes[edge.from].x + graph().nodes[edge.to].x)/2 - 12" [attr.y]="(graph().nodes[edge.from].y + graph().nodes[edge.to].y)/2 - 11" width="24" height="22" rx="5"/>
+        <text [attr.x]="(graph().nodes[edge.from].x + graph().nodes[edge.to].x)/2" [attr.y]="(graph().nodes[edge.from].y + graph().nodes[edge.to].y)/2 + 5">{{ edge.weight }}</text></g>
+      }
+      @for (node of graph().nodes; track node.id) {
+        <g class="graph-node" role="button" [attr.tabindex]="available(node.id) ? 0 : -1"
+          [attr.aria-disabled]="!available(node.id)" [attr.aria-label]="nodeLabel(node.id)"
+          (click)="choose(node.id)" (keydown.enter)="choose(node.id)" (keydown.space)="$event.preventDefault(); choose(node.id)"
+          [class.available]="available(node.id)" [class.current]="running() && currentStep()?.node === node.id">
+          <circle [attr.cx]="node.x" [attr.cy]="node.y" r="27" [class.visited]="route().includes(node.id)" [class.settled]="currentStep()?.settled?.includes(node.id)"/>
+          <text class="node-label" [attr.x]="node.x" [attr.y]="node.y + 5">{{ node.label }}</text>
+        </g>
+        @if (currentStep(); as step) {
+          <g class="distance-badge" aria-hidden="true">
+            <rect [attr.x]="node.x - 37" [attr.y]="node.y + 34" width="74" height="24" rx="5"/>
+            <text [attr.x]="node.x" [attr.y]="node.y + 50">Cost {{ formatDistance(step.distances[node.id]) }}</text>
+          </g>
+        }
+      }
+    </svg>
+    @if (currentStep(); as step) {
+      <p class="map-status" aria-live="polite">{{ revealed() ? 'Shortest route found' : 'Checking ' + graph().nodes[step.node].label }} · Badges show cost from START. {{ revealed() ? 'Dashed blue = optimal route.' : 'Blue ring = checked. Gold ring = current node.' }}</p>
+    }
+  </div>
+  <p class="route">Your path: @for (id of route(); track id; let last = $last) {<strong>{{ graph().nodes[id].label }}</strong>@if (!last) { → }}</p>
+  <p class="feedback" aria-live="polite">{{ message() }}</p>
+  <div class="actions">
+    @if (!revealed()) {<button (click)="undo()" [disabled]="running() || route().length < 2">Undo</button><button class="primary" (click)="run()" [disabled]="!finished() || running()">Run Dijkstra’s Algorithm</button>}
+    <button (click)="reset()">Try same map</button><button (click)="reset(true)">New random map</button>
+  </div>
+  @if (currentStep(); as step) {
+    <section class="algorithm" aria-label="Dijkstra progress">
+      <h2>{{ revealed() ? 'Shortest route found' : 'Checking node ' + graph().nodes[step.node].label }}</h2>
+      @if (revealed()) {
+        <div class="comparison"><p>Your route<strong>{{ cost() }}</strong></p><p>Dijkstra’s route<strong>{{ solution().cost }}</strong></p></div>
+        <p>Optimal path: @for (id of solution().path; track id; let last = $last) {<strong>{{ graph().nodes[id].label }}</strong>@if (!last) { → }}</p>
+        <p>The dashed blue route is optimal. {{ cost() === solution().cost ? 'Your route has the same minimum cost — there can be more than one best route.' : 'The algorithm saves ' + (cost() - solution().cost) + ' cost units.' }}</p>
+      }
+    </section>
+  }
+</section>
+<aside><h2>What just happened?</h2><p>Dijkstra’s algorithm repeatedly checks the unvisited node with the lowest known cost and updates the costs of its neighbors. With positive edge costs like these, it finds a shortest route. The same idea helps solve problems in navigation, networks, and logistics.</p></aside>
