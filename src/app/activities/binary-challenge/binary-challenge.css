@@ -1,1 +1,44 @@
-/* Activity-specific styles go here. */
+:host { display: block; max-width: 64rem; margin: auto; padding-bottom: 1rem; }
+.back { color: var(--psu-blue); font-size: .875rem; text-underline-offset: .25em; }
+.intro { margin: 2rem 0; }
+.eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--psu-blue); }
+h1 { font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -.04em; margin: .5rem 0; }
+p { line-height: 1.65; color: #46566b; }
+.game { border: 1px solid #cfdae6; border-radius: 1rem; overflow: hidden; padding-bottom: 1.5rem; }
+.status { background: var(--psu-navy); color: white; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: .875rem; }
+.level { color: var(--psu-pugh-blue); }
+.timer { font-variant-numeric: tabular-nums; font-size: 1.25rem; }
+.target { text-align: center; padding: 1.5rem 1rem .5rem; }
+.target h2 { margin: .5rem 0; font-size: 2rem; }
+.target strong { font-size: 3rem; color: var(--psu-blue); }
+.target p { margin: .5rem 0; }
+.start { text-align: center; margin: .5rem 1rem 1.5rem; }
+.start p { font-size: .8rem; }
+.bits { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: .65rem; padding: 1rem 1.5rem; }
+button { font: inherit; cursor: pointer; }
+.bit { display: flex; flex-direction: column; align-items: center; gap: .65rem; background: #e2edfa; color: var(--psu-navy); border: 2px solid transparent; border-radius: .7rem; padding: 1rem .25rem; }
+.bit.on { background: var(--psu-blue); color: white; }
+.bit:disabled { cursor: default; }
+.bit:not(:disabled):hover { border-color: var(--psu-blue); }
+.weight { font-size: .875rem; font-weight: 700; }
+.digit { font-size: 2rem; font-weight: 700; }
+.track { display: flex; width: 2.5rem; border-radius: 1rem; padding: 3px; background: #bacce0; }
+.track span { width: 1rem; height: 1rem; border-radius: 50%; background: white; }
+.on .track { justify-content: flex-end; background: #001e44; }
+.bit-state { font-size: .6rem; letter-spacing: .1em; }
+.total { display: flex; align-items: center; flex-direction: column; gap: .3rem; margin: 1rem; }
+.total > span:first-child { font-size: .8rem; }
+.total strong { font-size: 2.75rem; font-variant-numeric: tabular-nums; }
+.equation { font-size: .9rem; color: #46566b; }
+.feedback { text-align: center; padding-inline: 1rem; }
+.feedback h2 { font-size: 1.3rem; margin-bottom: .5rem; }
+.feedback p { margin: .5rem 0; }
+.actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
+.primary, .reset { border-radius: .4rem; padding: .8rem 1.25rem; min-height: 44px; font-weight: 700; }
+.reset { background: white; color: var(--psu-blue); border: 1px solid var(--psu-blue); }
+.primary { background: var(--psu-blue); color: white; border: 1px solid var(--psu-blue); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--psu-pugh-blue); outline-offset: 4px; }
+.explanation { background: #f2f5f9; padding: 1.5rem; margin-top: 2rem; border-radius: .6rem; }
+.explanation h2 { font-size: 1.125rem; }
+.explanation p { font-size: .9rem; }
+@media (max-width: 600px) { .bits { gap: .3rem; padding: 1rem .5rem; } .weight { font-size: .7rem; } .track { width: 1.8rem; } .track span { width: .7rem; height: .7rem; } .bit { padding: .75rem 0; } .level { display: block; margin-top: .3rem; } .digit { font-size: 1.5rem; } }

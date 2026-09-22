@@ -1,3 +1,58 @@
-<h1>Binary Challenge</h1>
-<p>Think like a computer.</p>
-<p>Activity coming soon.</p>
+<a class="back" routerLink="/">← All challenges</a>
+
+<div class="intro">
+  <p class="eyebrow">Zeros. Ones. A whole new way to count.</p>
+  <h1>Binary Challenge</h1>
+  <p>Flip the bits. Build the number. Think like a computer.</p>
+</div>
+
+<section class="game" aria-label="Binary number challenge">
+  <div class="status">
+    <span>
+      Round {{ round() + 1 }} of 3 
+      <span class="level">· {{ ['Warm up', 'Level up', 'Think in eight bits'][round()] }}
+      </span>
+    </span>
+    <span class="timer" role="timer" aria-label="Elapsed time">{{ time() }}</span>
+  </div>
+  <div class="target">
+    <p class="eyebrow">Your target</p>
+    <h2>Make <strong>{{ target() }}</strong><span aria-hidden="true">!</span></h2>
+    <p>Turn on the switches whose values add up to the target.</p>
+  </div>
+  @if (!started()) {
+    <div class="start">
+      <button class="primary" (click)="start()">Start challenge →</button>
+      <p>Three random numbers. One timer. Go at your own pace.</p>
+    </div>
+  }
+  <div class="bits" role="group" aria-label="Eight binary switches">
+    @for (weight of weights; track weight) {
+      <button class="bit" role="switch" [class.on]="isOn(weight)" [attr.aria-checked]="isOn(weight)"
+        [attr.aria-label]="weight + ' bit'" [disabled]="!started() || solved()" (click)="toggle(weight)">
+        <span class="weight">{{ weight }}</span><span class="digit">{{ isOn(weight) ? 1 : 0 }}</span>
+        <span class="track" aria-hidden="true"><span></span></span><span class="bit-state">{{ isOn(weight) ? 'ON' : 'OFF' }}</span>
+      </button>
+    }
+  </div>
+  <div class="total"><span>Your number</span><strong>{{ value() }}</strong><span class="equation">{{ equation() }} = {{ value() }}</span></div>
+  <div class="feedback" aria-live="polite" aria-atomic="true">
+    @if (finished()) {
+      <h2>Three for three. You speak binary!</h2><p>You completed all three numbers in {{ time() }}.</p>
+    } @else if (solved()) {
+      <h2>You made {{ target() }}!</h2><p>Those bits add up. Ready for a bigger number?</p>
+    } @else if (started()) {
+      <p>{{ value() < target() ? 'Keep going — your number is below the target.' : 'A little too high — try switching some bits off.' }}</p>
+    }
+  </div>
+  <div class="actions">
+    @if (solved() && !finished()) { <button class="primary" (click)="nextRound()">Next round →</button> }
+    @if (started()) { <button [class.primary]="finished()" class="reset" (click)="reset()">{{ finished() ? 'Play again' : 'Start over' }}</button> }
+  </div>
+</section>
+
+<aside class="explanation"><h2>What does this have to do with computer science?</h2><p>Each switch is a 
+  <strong>bit</strong>: a 0 or a 1. From right to left, each position is worth twice as much as the last. 
+  Add the values of the bits that are on to get your number. With eight bits, you can represent any 
+  whole number from <strong>0 to 255</strong>.</p><p>For example, 86 = 64 + 16 + 4 + 2. 
+  Computers use these same binary building blocks to represent information.</p></aside>
