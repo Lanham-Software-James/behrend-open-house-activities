@@ -2,6 +2,12 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    title: 'Open House Challenges | Penn State Behrend',
+    loadComponent: () => import('./home/home').then((m) => m.Home),
+  },
+  {
     path: 'activities/beat-binary-search',
     title: 'Beat Binary Search | Penn State Behrend',
     loadComponent: () => import('./activities/beat-binary-search/beat-binary-search').then((m) => m.BeatBinarySearch),
