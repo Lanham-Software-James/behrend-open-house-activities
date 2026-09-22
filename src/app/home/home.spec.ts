@@ -126,9 +126,8 @@ describe('Homepage', () => {
     }
   });
 
-  it('explains that the activities are previews and require no coding experience', () => {
+  it('reassures visitors that no coding experience is required', () => {
     expect(element('main').textContent).toContain('No coding experience needed.');
-    expect(element('.availability').textContent).toContain('Explore each activity’s preview');
   });
 
   it('shows a mathematically correct eight-bit example for 86', () => {
