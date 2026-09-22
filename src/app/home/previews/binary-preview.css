@@ -1,0 +1,7 @@
+:host { display: contents; }
+.bits { display: flex; width: 100%; gap: .3rem; }
+.bits > span { flex: 1; min-width: 0; position: relative; background: white; padding: .65rem 0; text-align: center; border-radius: .25rem; font-size: 1.35rem; font-weight: 700; }
+.bits small { position: absolute; top: -1.25rem; left: 0; width: 100%; font-size: .6rem; color: var(--psu-blue); font-weight: 400; }
+.bits > .on { background: var(--psu-blue); color: white; }
+.binary-total { font-size: .75rem; }
+@media (max-width: 720px) { .bits { max-width: 320px; } }

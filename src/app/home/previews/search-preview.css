@@ -1,0 +1,6 @@
+:host { display: contents; }
+.number-range { display: flex; align-items: center; gap: 1rem; width: 90%; font-size: .75rem; color: var(--psu-pugh-blue); }
+.range-line { height: 1px; background: #96bee666; flex: 1; }
+.guess { font-size: 3rem; font-weight: 700; line-height: 1; letter-spacing: -.04em; }
+.guess span { color: var(--psu-pugh-blue); padding-left: .2rem; }
+.preview-caption { font-size: .75rem; color: var(--psu-pugh-blue); }

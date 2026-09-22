@@ -1,0 +1,42 @@
+<section class="intro" aria-labelledby="welcome-title">
+  <div>
+    <p class="eyebrow">A little curiosity. A lot of possibility.</p>
+    <h1 id="welcome-title">Think you can beat<br>the <span>computer?</span></h1>
+    <p class="lead">Find the number. Discover the route. Crack the code.<br class="desktop-break"> Explore how computer scientists turn big problems into smart solutions.</p>
+  </div>
+  <div class="intro-note">
+    <span class="note-symbol" aria-hidden="true">&lt;/&gt;</span>
+    <p>No coding experience needed.<br><strong>Just bring your problem-solving brain.</strong></p>
+  </div>
+</section>
+
+<section aria-labelledby="activities-title">
+  <div class="section-heading">
+    <h2 id="activities-title">Choose your challenge</h2>
+    <span>Three ways to think like a computer scientist</span>
+  </div>
+  <div class="activities">
+    @for (activity of activities; track activity.id) {
+      <a class="activity" [class.theme-light]="activity.theme === 'light'" [class.theme-dark]="activity.theme === 'dark'"
+         [routerLink]="activity.route" [attr.aria-labelledby]="activity.id + '-title'" [attr.aria-describedby]="activity.id + '-description'">
+        <div class="preview" aria-hidden="true">
+          <span class="preview-label">{{ activity.preview.label }}</span>
+          <ng-container *ngComponentOutlet="activity.previewComponent; inputs: { preview: activity.preview }" />
+        </div>
+        <div class="card-content">
+          <p class="category">{{ activity.category }}</p>
+          <h3 [id]="activity.id + '-title'">{{ activity.title }}</h3>
+          <p [id]="activity.id + '-description'">{{ activity.description }}</p>
+          <span class="concept">{{ activity.concept }}</span>
+          <span class="card-action">{{ activity.actionLabel }} <span aria-hidden="true">→</span></span>
+        </div>
+      </a>
+    }
+  </div>
+  <p class="availability">The challenges are taking shape. Explore each activity’s preview as we get ready for Open House.</p>
+</section>
+
+<aside class="closing-note">
+  <span class="closing-mark" aria-hidden="true">?</span>
+  <div><h2>It starts with “what if?”</h2><p>These are the kinds of questions we explore in Computer Science and Software Engineering. Ask a student or faculty member where your curiosity could take you.</p></div>
+</aside>
