@@ -1,0 +1,25 @@
+<section aria-labelledby="replay-title">
+  <h2 id="replay-title">Now watch binary search</h2>
+  <p>The same secret number. A midpoint every time.</p>
+  @if (step(); as current) {
+    <div class="scale" aria-hidden="true">
+      <div class="remaining" [style.left.%]="current.low - 1" [style.width.%]="current.high - current.low + 1"></div>
+      <div class="marker" [style.left.%]="current.midpoint - 0.5"></div>
+    </div>
+    <div class="endpoints" aria-hidden="true"><span>1</span><span>100</span></div>
+    <div class="step" aria-live="polite" aria-atomic="true">
+      <p class="range">Remaining range: <strong>{{ current.low }}–{{ current.high }}</strong></p>
+      <p class="midpoint">Guess {{ index() + 1 }}: <strong>{{ current.midpoint }}</strong></p>
+      <p>@if (current.hint === 'Found') { Found {{ target() }} in {{ steps().length }} {{ steps().length === 1 ? 'guess' : 'guesses' }}! }
+      @else if (current.hint === 'Higher') { Higher — eliminate {{ current.low }}–{{ current.midpoint }}. }
+      @else { Lower — eliminate {{ current.midpoint }}–{{ current.high }}. }</p>
+    </div>
+    <ol aria-label="Binary search guesses">@for (guess of shown(); track guess.midpoint) {<li>{{ guess.midpoint }} <span>{{ guess.hint }}</span></li>}</ol>
+    <div class="controls">
+      @if (playing()) { <button (click)="pause()">Pause</button> }
+      @else { <button (click)="play()">{{ complete() ? 'Replay search' : 'Play search' }}</button> }
+      @if (!complete()) { <button (click)="pause(); next()">Next step</button> }
+    </div>
+    <p class="caption">Blue shows the remaining possibilities; the line marks the midpoint. Each hint removes half the range.</p>
+  }
+</section>
