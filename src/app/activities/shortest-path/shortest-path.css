@@ -1,1 +1,53 @@
-/* Activity-specific styles go here. */
+:host { display: block; max-width: 64rem; margin: auto; padding-bottom: 1rem; }
+.back { color: var(--psu-blue); font-size: .875rem; }
+.intro { margin: 2rem 0; }
+.eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--psu-blue); }
+h1 { font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -.04em; margin: .5rem 0; }
+p { line-height: 1.65; color: #46566b; }
+h2 { font-size: 1.2rem; }
+.game { border: 1px solid #cfdae6; border-radius: 1rem; overflow: hidden; }
+.banner { display: flex; justify-content: space-between; gap: 1rem; background: var(--psu-navy); color: white; padding: 1.25rem; }
+.instructions { margin: 1.25rem; font-size: .9rem; }
+.map { background: #e2edfa; padding: .75rem; }
+svg { width: 100%; display: block; max-height: 410px; }
+line { stroke: #92a8c1; stroke-width: 3; }
+line.player { stroke: var(--psu-navy); stroke-width: 6; }
+line.optimal { stroke: #217ac2; stroke-width: 7; stroke-dasharray: 10 5; }
+rect { fill: white; }
+text { text-anchor: middle; fill: var(--psu-navy); font: 700 14px Roboto, Arial, sans-serif; }
+circle { fill: white; stroke: var(--psu-blue); stroke-width: 3; }
+circle.visited { fill: #96bee6; }
+circle.settled { stroke: #217ac2; stroke-width: 6; }
+.node-label { font-size: 10px; }
+.nodes, .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; padding: 1.25rem; }
+button { font: inherit; min-height: 44px; padding: .7rem 1rem; border: 1px solid var(--psu-blue); border-radius: .4rem; background: white; color: var(--psu-blue); cursor: pointer; }
+button.primary, .nodes button.selected { background: var(--psu-blue); color: white; }
+button:disabled { cursor: default; opacity: .5; }
+.nodes button.selected { opacity: 1; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--psu-pugh-blue); outline-offset: 4px; }
+.route, .feedback { text-align: center; margin: .5rem 1rem; }
+.feedback { font-weight: 700; color: var(--psu-blue); }
+.algorithm { background: #f2f5f9; padding: 1.5rem; text-align: center; }
+.distances { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
+.distances span { background: white; padding: .6rem; border: 1px solid #cfdae6; border-radius: .4rem; font-size: .65rem; min-width: 65px; }
+.distances strong { display: block; font-size: 1.2rem; margin: .4rem 0; }
+.distances .checked { border-color: var(--psu-blue); background: #e2edfa; }
+.comparison { display: flex; justify-content: center; gap: 2rem; }
+.comparison strong { display: block; font-size: 2rem; color: var(--psu-navy); }
+aside { padding: 1.5rem; background: #f2f5f9; border-radius: .6rem; margin-top: 2rem; }
+aside p { font-size: .9rem; }
+@media (max-width: 600px) { .banner { flex-direction: column; gap: .5rem; } .nodes { gap: .4rem; } .nodes button { padding: .7rem; } }
+
+circle.available { cursor: pointer; }
+.node-label { pointer-events: none; }
+
+.graph-node.available { cursor: pointer; }
+.graph-node.available circle { stroke-width: 4; }
+.graph-node.available:hover circle { fill: #96bee6; }
+.graph-node:focus { outline: none; }
+.graph-node:focus-visible circle { stroke: #001e44; stroke-width: 6; stroke-dasharray: 4 3; }
+.graph-node.current circle { stroke: #936300; stroke-width: 7; }
+line.exploring { stroke: #936300; stroke-width: 5; }
+.distance-badge text { font-size: 11px; }
+.distance-badge rect { fill: white; stroke: #96bee6; }
+.map-status { margin: .5rem; text-align: center; font-size: .85rem; }
