@@ -36,6 +36,29 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
+## GitHub Pages deployment
+
+The workflow in `.github/workflows/deploy-pages.yml` installs dependencies with
+`npm ci`, builds the production application using Node.js 24, and publishes the
+browser output to GitHub Pages. The base URL comes from the repository's Pages
+configuration so assets load correctly under the repository path.
+
+In the repository's **Settings → Pages → Build and deployment**, set **Source**
+to **GitHub Actions**. After the workflow is merged into `main`, every push to
+`main` deploys the site. You can also run **Deploy to GitHub Pages** manually from
+the **Actions** tab with `main` selected. Other branches can build manually but
+do not deploy.
+
+The default site URL is
+https://lanham-software-james.github.io/behrend-open-house-activities/.
+
+To reproduce the Pages build locally:
+
+```bash
+npm ci
+npm run build -- --configuration production --base-href /behrend-open-house-activities/
+```
+
 ## Running unit tests
 
 To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
