@@ -148,7 +148,7 @@ describe('Homepage', () => {
     await fixture.whenStable();
     expect(router.url).toBe(destination);
     expect(element('main h1').textContent).toBe(title);
-    expect(element('main').textContent).toContain('Activity coming soon.');
+    expect(element('main').textContent).toContain(title === 'Binary Challenge' ? 'Start challenge' : 'Activity coming soon.');
     expect(root.querySelector('.activities')).toBeNull();
     expect(TestBed.inject(Title).getTitle()).toBe(`${title} | Penn State Behrend`);
   });
